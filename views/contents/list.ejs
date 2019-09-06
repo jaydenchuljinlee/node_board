@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Board List</title>
+    <link rel="stylesheet" type="text/css" href="/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="header">
+    <% include ../layouts/header.ejs %>
+</div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>게시글 목록</h1>
+    </div>
+
+    <div class="pull-right" style="width: 100px; margin: 10px 0;">
+        <a data-page="form" href="#" class="btn btn-primary btn-block move">등록</a>
+    </div>
+
+    <div>
+        <table class="table table-hover">
+            <thead>
+                <% boardList.forEach(function(board) { %>
+                    <tr>
+                        <td><% board.index %></td>
+                        <td><% board.boardType.value %></td>
+                        <td>
+                            <a href="'/board?index=' + <% board.index %>">
+                                <% board.title %>
+                            </a>
+                        </td>
+                        <td>
+                            <!-- 날짜 포맷 변환 : 그냥 출력 시 ISO 방식으로 출력된다 (2018-12-26T08:27:58.659) -->
+                            <a><% board.createdDate %></a>
+                        </td>
+                        <td>
+                            <a><% board.updatedDate %></a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+<div class="footer">
+    <% include ../layouts/footer.ejs %>
+</div>
+<form id="pageMoveFrm">
+    <input type="hidden" id="pageNameInput" name="pageName">
+</form>
+
+</body>
+<script type="text/javascript">
+
+    window.addEventListener('DOMContentLoaded',function() {
+        
+        var move = document.getElementsByClassName("move");
+
+        move[0].addEventListener("click",function(e) {
+            var page = e.target.dataset.page;
+
+            document.getElementById('pageMoveFrm').setAttribute('action',"/board/"+page);
+            document.getElementById('pageNameInput').setAttribute('value',page);
+
+            document.getElementById('pageMoveFrm').submit();
+        });
+    })
+</script>
+
+</html>
