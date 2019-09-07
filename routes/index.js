@@ -1,8 +1,11 @@
-module.exports = function(app,Board) {
+var Board = require('../models/board');
+
+module.exports = function(app,passport) {
 
     app.get('/board',function(req,res) {
         Board.find(function(err,boardList) {
             if(err) return res.status(500).send({error:'database failure'});
+            console.log(boardList);
             res.render('contents/list',{
                 boardList : boardList
             });

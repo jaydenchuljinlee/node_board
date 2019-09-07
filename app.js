@@ -1,8 +1,14 @@
+//ENV
+require('dotenv').config();
+
 var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
 var mongoose    = require('mongoose');
 var fs          = require('fs');
+var passport    = require('passport');
+
+
 
 //view engine
 app.set('views',__dirname + '/views');
@@ -18,26 +24,14 @@ app.use(bodyParser.json());
 //configure server port
 var port = process.env.port || 8080;
 
-var Board = require('./models/board'); 
-
 //configure router
-var router = require('./routes')(app,Board);
+var BookRouter = require('./routes/index')(app,passport);
+var LoginRouter = require('./routes/login')(app,passport);
 
-//connect to mongoDB server
-var db = mongoose.connection;
-db.on('error',console.error);
-db.once('open',function() {
-    //connected to mongoDB server
-    console.log("Connected to mongoDB server");
-});
+mongoose.Promise = global.Promise;
 
-mongoose.connect("mongodb://localhost/chuljin",{useNewUrlParser:true});
+mongoose.connect(process.env.MONGO_URI,{useNewUrlParser:true})
+    .then(() => console.log('Successfully connected to mongodb'))
+    .catch(e => console.log(e));
 
-
-
-
-
-//run server
-var server = app.listen(port,function() {
-    console.log("Express server has started on port "+port);
-});
+app.listen(port,() => console.log("Express server has started on port "+port));
