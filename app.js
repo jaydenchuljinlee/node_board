@@ -1,13 +1,14 @@
 //ENV
 require('dotenv').config();
 
-var express     = require('express');
-var app         = express();
-var bodyParser  = require('body-parser');
-var mongoose    = require('mongoose');
-var fs          = require('fs');
-var passport    = require('passport');
-
+const express     = require('express');
+const session     = require('express-session'); // 세션 설정
+const app         = express();
+const bodyParser  = require('body-parser');
+const mongoose    = require('mongoose');
+const fs          = require('fs');
+const passport       = require('passport');
+const passportConfig = require('./passport'); // 여기
 
 
 //view engine
@@ -20,6 +21,12 @@ app.use(express.static('public'));
 //configure app to use bodyParser
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
+//// 세션 활성화
+app.use(session({secret : '비밀코드',resave : true, saveUninitialized : false}));
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig();
 
 //configure server port
 var port = process.env.port || 8080;
