@@ -5,36 +5,37 @@ const Users             = require('./models/user');
 
 function loginByThirdparty(info, done) {
     console.log('process : ' + info.auth_type);
-
+    
     Users.find({user_id:info.auth_id},function(err,result) {
         if (err) return done(err);
         
-        if (result === null) {
-            // 신규 유저는 회원 가입 이후 로그인 처리
+        var user = new Users();
 
-            var user = new Users();
+        if (result == null) {
 
             user.user_id    = info.auth_id;
             user.name       = info.auth_name;
             user.auth_type  = info.auth_type;
             user.auth_email = info.auth_email;
             user.user_state = 'alive';
-
+        
             user.save(function(err) {
                 if(err) return done(err);
+                
                 done(null, {
                     'user_id': info.auth_id,
                     'nickname': info.auth_name
-                  });
+                    });
             });
+            
         } else {
             //기존유저 로그인 처리
-            done(null, {
-                'user_id': result.user_id,
-                'nickname': result.nickname
-              });
+            user.user_id    = result.user_id;
+            user.name       =  result.name;
+            done(null, user);
         }
     });
+    
   }
 
 module.exports = () => {
@@ -50,7 +51,7 @@ module.exports = () => {
         usernameField       : 'id',
         passwordField       : 'pw',
         session             : true,
-        passReqToCallback   : false
+        passReqToCallback   : true
         }, (id,password,done) => {
             Users.find({user_id:id},(findErr,user) => {
                 if (findErr) return done(findErr);
@@ -70,6 +71,7 @@ module.exports = () => {
         clientID : process.env.CLIENT_ID,
         clientSecret : process.env.SECRET_ID,
         callbackURL : process.env.CALLBACK_URL,
+        session             : true,
         profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone',
         'updated_time', 'verified', 'displayName']
         },function (accessToken, refreshToken, profile, done) {
@@ -81,6 +83,6 @@ module.exports = () => {
                 'auth_name'     : _profile.name,
                 'auth_email'    : _profile.id
             },done);
-            }
-        ));
+        }
+    ));
 }

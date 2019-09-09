@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 //// 세션 활성화
-app.use(session({secret : '비밀코드',resave : true, saveUninitialized : false}));
+app.use(session({secret : '@#@$MYSIGN#@$#$',resave : true, saveUninitialized : false}));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig();
