@@ -1,4 +1,4 @@
-//ENV
+//ENV 프로젝트 관련 secret 정보 파일
 require('dotenv').config();
 
 const express     = require('express');
@@ -22,8 +22,8 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-//// 세션 활성화
-app.use(session({secret : '@#@$MYSIGN#@$#$',resave : true, saveUninitialized : false}));
+// 세션 활성화
+app.use(session({secret : process.env.SECRET,resave : true, saveUninitialized : false}));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig();

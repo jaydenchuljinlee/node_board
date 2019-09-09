@@ -23,21 +23,21 @@
     <div>
         <table class="table table-hover">
             <thead>
-                <% boardList.forEach(function(board) { %>
+                <% BoardList.forEach((board) => { %>
                     <tr>
-                        <td><% board.index %></td>
-                        <td><% board.boardType %></td>
+                        <td><%= board._id %></td>
+                        <td><%= board.board_type %></td>
                         <td>
-                            <a href="'/board?index=' + <% board.index %>">
-                                <% board.title %>
+                            <a href='/board?index='<%= board._id %>>
+                                <%= board.title %>
                             </a>
                         </td>
                         <td>
                             <!-- 날짜 포맷 변환 : 그냥 출력 시 ISO 방식으로 출력된다 (2018-12-26T08:27:58.659) -->
-                            <a><% board.createdDate %></a>
+                            <a><%= board.created_date %></a>
                         </td>
                         <td>
-                            <a><% board.updatedDate %></a>
+                            <a><%= board.updated_date %></a>
                         </td>
                     </tr>
                 <% }) %>

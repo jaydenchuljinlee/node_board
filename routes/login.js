@@ -1,5 +1,5 @@
 
-module.exports = function(app,passport) {
+module.exports = (app,passport) =>{
 
     //facebook 로그인
     app.get('/auth/login/facebook',

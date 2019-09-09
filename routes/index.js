@@ -19,14 +19,14 @@ const auth = (id,res) => {
 const bookFind = (res) => {
 
     // 게시판 전체 리스트 조회 쿼리
-    Board.find(function(err,boardList) {
+    Board.find((err,boardList) =>{
 
         //DB 오류
         if(err) return res.status(500).send({error:'database failure'});
         
         //페이지 리턴
         res.render('contents/list',{
-            boardList : boardList
+            BoardList : boardList
         });
     });
 }
@@ -35,7 +35,7 @@ const bookFind = (res) => {
 /* 
 * @param    : app(express 객체), passport(natural passport 객체)
 */
-module.exports = function(app,passport) {
+module.exports = (app,passport)=> {
 
     // 게시판 메인 url 접근
     app.get('/board',(req,res) => {
@@ -48,11 +48,11 @@ module.exports = function(app,passport) {
         
     });
     
-    app.get('/board/form',function(req,res) {
+    app.get('/board/form',(req,res) => {
         res.render('contents/form');
     });
 
-    app.post('/board/insert',function(req,res) {
+    app.post('/board/insert',(req,res) => {
         var board = new Board();
         
         board.title = req.body.title;
@@ -60,7 +60,7 @@ module.exports = function(app,passport) {
         board.contents = req.body.content;
         board.board_type = req.body.boardType;
 
-        board.save(function(err) {
+        board.save((err) => {
             if(err) {
                 console.error(err);
                 res.json({result:0});
